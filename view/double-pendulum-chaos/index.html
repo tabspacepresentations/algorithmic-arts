@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Double Pendulum Chaos - Tabspace Algorithmic Arts</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#ff6D00',
+                            green: '#22c55e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Fullscreen container styling (includes Name and Viewport/Controls) */
+        #fullscreen-target:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #fullscreen-target:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #fullscreen-target:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-6 py-4 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Algorithmic Arts Logo">
+                    <img src="../../images/logo.png" alt="Tabspace Presentations Logo" class="h-16 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-lg md:text-2xl font-light">/ Double Pendulum Chaos</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">Back to Arts</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="w-full px-6 py-8 space-y-6 max-w-4xl mx-auto flex-grow flex flex-col items-center justify-center">
+        
+        <!-- Description Section -->
+        <div class="card-section p-6 md:p-8 w-full text-center space-y-4 bg-zinc-900/40 border border-zinc-800">
+            <p class="text-zinc-200 text-sm md:text-base leading-relaxed">
+                A <span class="text-brand-orange">double pendulum</span> is a physical pendulum with another pendulum attached to its end, exhibiting rich unpredictable chaotic motion highly sensitive to initial conditions.
+            </p>
+            <p class="text-zinc-400 text-xs md:text-sm leading-relaxed">
+                This enhanced algorithmic arts piece simulates nonlinear Lagrangian equations of motion, featuring smooth animated trace trails, dynamic color shimmering, and fully interactive touch pinch-to-zoom, swipe, and wheel controls directly within your browser viewport.
+            </p>
+        </div>
+
+        <!-- Fullscreen Target (Includes Title, Canvas with Animation/Pinch/Zoom, and Controls) -->
+        <div id="fullscreen-target" class="w-full flex flex-col items-center space-y-4">
+            <div class="text-center space-y-1">
+                <h1 class="text-2xl md:text-3xl tracking-tight text-white">Double Pendulum Chaos</h1>
+            </div>
+
+            <!-- Canvas Viewport with Pan, Pinch, and Wheel Zoom support -->
+            <div id="viewport-wrapper" class="card-section p-2 bg-zinc-900/90 w-full max-w-[600px] aspect-square flex items-center justify-center overflow-hidden border border-zinc-800 rounded-xl relative shadow-2xl touch-none">
+                <canvas id="pendulum-canvas" class="w-full h-full block rounded-lg cursor-grab active:cursor-grabbing"></canvas>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="flex gap-2 justify-center pt-2">
+                <button onclick="regeneratePendulum()" class="cta-btn-green px-6 py-2 text-sm">Shift Pendulum</button>
+                <button onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 py-2 text-xs md:text-sm flex items-center gap-1.5">
+                    <span>Fullscreen</span> ⛶
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="py-6 border-t border-zinc-900 text-center">
+        <p class="text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-brand-green">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- ANIMATION, RENDERING & TOUCH PINCH / PAN SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            }
+        }
+
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('fullscreen-target');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        const canvas = document.getElementById('pendulum-canvas');
+        const ctx = canvas.getContext('2d');
+        const wrapper = document.getElementById('viewport-wrapper');
+
+        // State variables declared upfront
+        let zoomLevel = 1.0;
+        let panX = 0;
+        let panY = 0;
+        let colorOffset = 0;
+        let animTime = 0;
+
+        // Pendulum physical parameters & state variables
+        let r1 = 70, r2 = 70;
+        let m1 = 10, m2 = 10;
+        let theta1 = Math.PI / 2;
+        let theta2 = Math.PI / 2;
+        let omega1 = 0, omega2 = 0;
+        let g = 1;
+        let tracePoints = [];
+
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+        let initialPinchDistance = null;
+
+        function initPendulum() {
+            theta1 = Math.PI / (1.5 + Math.random() * 0.5);
+            theta2 = Math.PI / (1.5 + Math.random() * 0.5);
+            omega1 = 0;
+            omega2 = 0;
+            tracePoints = [];
+        }
+
+        function resizeCanvas() {
+            const parent = canvas.parentElement;
+            canvas.width = parent.clientWidth - 16;
+            canvas.height = parent.clientHeight - 16;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        initPendulum();
+
+        function regeneratePendulum() {
+            playSound('click');
+            colorOffset = (colorOffset + 60) % 360;
+            initPendulum();
+        }
+
+        // Mouse Pan Support
+        wrapper.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX - panX;
+            startY = e.clientY - panY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            panX = e.clientX - startX;
+            panY = e.clientY - startY;
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        // Touch Pan & Precise Two-Finger Pinch-to-Zoom Support
+        wrapper.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                isDragging = true;
+                startX = e.touches[0].clientX - panX;
+                startY = e.touches[0].clientY - panY;
+                initialPinchDistance = null;
+            } else if (e.touches.length === 2) {
+                isDragging = false;
+                initialPinchDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+            }
+        }, { passive: true });
+
+        wrapper.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1 && isDragging) {
+                panX = e.touches[0].clientX - startX;
+                panY = e.touches[0].clientY - startY;
+            } else if (e.touches.length === 2 && initialPinchDistance !== null) {
+                const currentDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                const factor = currentDistance / initialPinchDistance;
+                zoomLevel = Math.min(Math.max(0.3, zoomLevel * factor), 5.0);
+                initialPinchDistance = currentDistance;
+            }
+        }, { passive: true });
+
+        wrapper.addEventListener('touchend', (e) => {
+            if (e.touches.length < 1) isDragging = false;
+            if (e.touches.length < 2) initialPinchDistance = null;
+        });
+
+        // Desktop Wheel/Trackpad Zoom Support
+        wrapper.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomSensitivity = 0.001;
+            zoomLevel = Math.min(Math.max(0.3, zoomLevel - e.deltaY * zoomSensitivity), 5.0);
+        }, { passive: false });
+
+        function updatePhysics() {
+            // Runge-Kutta / Euler integration for Double Pendulum Lagrangian equations
+            for (let step = 0; step < 4; step++) {
+                let deltaTheta = theta1 - theta2;
+
+                let num1 = -g * (2 * m1 + m2) * Math.sin(theta1) - m2 * g * Math.sin(theta1 - 2 * theta2) - 2 * Math.sin(deltaTheta) * m2 * (omega2 * omega2 * r2 + omega1 * omega1 * r1 * Math.cos(deltaTheta));
+                let den1 = r1 * (2 * m1 + m2 - m2 * Math.cos(2 * theta1 - 2 * theta2));
+                let alpha1 = num1 / den1;
+
+                let num2 = 2 * Math.sin(deltaTheta) * (omega1 * omega1 * r1 * (m1 + m2) + g * (m1 + m2) * Math.cos(theta1) + omega2 * omega2 * r2 * m2 * Math.cos(deltaTheta));
+                let den2 = r2 * (2 * m1 + m2 - m2 * Math.cos(2 * theta1 - 2 * theta2));
+                let alpha2 = num2 / den2;
+
+                omega1 += alpha1 * 0.25;
+                omega2 += alpha2 * 0.25;
+                theta1 += omega1 * 0.25;
+                theta2 += omega2 * 0.25;
+            }
+        }
+
+        function render() {
+            updatePhysics();
+
+            ctx.fillStyle = '#111113';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.save();
+            ctx.translate(canvas.width / 2 + panX, canvas.height / 2 + panY - 30);
+            ctx.scale(zoomLevel, zoomLevel);
+
+            animTime += 0.02;
+
+            // Compute positions
+            let x1 = r1 * Math.sin(theta1);
+            let y1 = r1 * Math.cos(theta1);
+            let x2 = x1 + r2 * Math.sin(theta2);
+            let y2 = y1 + r2 * Math.cos(theta2);
+
+            tracePoints.push({ x: x2, y: y2 });
+            if (tracePoints.length > 300) {
+                tracePoints.shift();
+            }
+
+            // Draw trace path
+            if (tracePoints.length > 1) {
+                for (let i = 0; i < tracePoints.length - 1; i++) {
+                    let p1 = tracePoints[i];
+                    let p2 = tracePoints[i + 1];
+                    let hue = (colorOffset + i * 0.5 + Math.sin(animTime * 0.5) * 30) % 360;
+
+                    ctx.beginPath();
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.strokeStyle = `hsla(${hue}, 85%, 55%, ${i / tracePoints.length * 0.7})`;
+                    ctx.lineWidth = 1.8;
+                    ctx.stroke();
+                }
+            }
+
+            // Draw pendulum arms and bobs
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = '#71717a';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(x1, y1, 5, 0, Math.PI * 2);
+            ctx.arc(x2, y2, 6, 0, Math.PI * 2);
+            ctx.fillStyle = '#22c55e';
+            ctx.fill();
+
+            ctx.restore();
+            requestAnimationFrame(render);
+        }
+
+        requestAnimationFrame(render);
+    </script>
+</body>
+</html>

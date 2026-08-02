@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Yang-Mills Field Visualizer & Mathematical Art | Tabspace Algorithmic Art</title>
+    <meta name="description" content="Explore interactive Yang-Mills field visualizer simulations in real-time. Discover how non-Abelian gauge theory, curvature tensors, and quantum field configurations create mesmerizing algorithmic artwork with custom controls.">
+    <link rel="canonical" href="https://tabspacepresentations.com/algorithmic-art/view/yang-mills-field-visualizer/">
+
+    <!-- Open Graph / Social Meta Tags -->
+    <meta property="og:title" content="Interactive Yang-Mills Field Visualizer & Mathematical Art">
+    <meta property="og:description" content="Explore interactive Yang-Mills field visualizer simulations in real-time. Discover how non-Abelian gauge theory, curvature tensors, and quantum field configurations create mesmerizing algorithmic artwork with custom controls.">
+    <meta property="og:url" content="https://tabspacepresentations.com/algorithmic-art/view/yang-mills-field-visualizer/">
+    <meta property="og:type" content="website">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#ff6D00',
+                            green: '#22c55e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        .ad-slot-728x90 {
+            width: 728px;
+            height: 90px;
+            max-width: 100%;
+            background-color: rgba(24, 24, 27, 0.8);
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #71717a;
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        #fullscreen-target:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #fullscreen-target:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #fullscreen-target:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-6 py-4 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Algorithmic Art Logo">
+                    <img src="../../images/logo.png" alt="Tabspace Presentations Logo" class="h-16 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-lg md:text-2xl font-light">/ Yang-Mills Field Visualizer</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">Back to Arts</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="w-full px-6 py-8 space-y-6 max-w-4xl mx-auto flex-grow flex flex-col items-center justify-center">
+        
+        <!-- Description Section -->
+        <section class="card-section p-6 md:p-8 w-full text-center space-y-4 bg-zinc-900/40 border border-zinc-800">
+            <p class="text-zinc-200 text-sm md:text-base leading-relaxed">
+                A <span class="text-brand-orange">Yang-Mills field</span> is a gauge field based on a non-Abelian symmetry group, forming the mathematical foundation for the Standard Model of particle physics.
+            </p>
+            <p class="text-zinc-400 text-xs md:text-sm leading-relaxed">
+                Click and drag anywhere on the canvas to freely pan and position the quantum field curvature art in any direction.
+            </p>
+        </section>
+
+        <!-- Ad Slot Under Description (728 x 90) -->
+        <div class="w-full py-2 flex justify-center">
+            <div class="ad-slot-728x90">
+                <span>Horizontal Banner Ad (728 &times; 90)</span>
+            </div>
+        </div>
+
+        <!-- Fullscreen Target -->
+        <div id="fullscreen-target" class="w-full flex flex-col items-center space-y-4">
+            <div class="text-center space-y-1">
+                <h2 class="text-2xl md:text-3xl tracking-tight text-white">Interactive Yang-Mills Field Simulation</h2>
+            </div>
+
+            <!-- Canvas Viewport -->
+            <div id="viewport-wrapper" class="card-section p-2 bg-zinc-900/90 w-full max-w-[600px] aspect-square flex items-center justify-center overflow-hidden border border-zinc-800 rounded-xl relative shadow-2xl touch-none">
+                <canvas id="ym-canvas" class="w-full h-full block rounded-lg cursor-grab active:cursor-grabbing" aria-label="Interactive Yang-Mills Field Visualizer Animation Canvas"></canvas>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="flex gap-2 justify-center pt-2">
+                <button onclick="randomizePattern()" class="cta-btn-green px-6 py-2 text-sm">Randomize</button>
+                <button onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 py-2 text-xs md:text-sm flex items-center gap-1.5">
+                    <span>Fullscreen</span> ⛶
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Ad Slot Above Footer (728 x 90) -->
+    <div class="w-full px-6 py-4 flex justify-center">
+        <div class="ad-slot-728x90">
+            <span>Horizontal Banner Ad (728 &times; 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-6 border-t border-zinc-900 text-center">
+        <p class="text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-brand-green">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- SIMULATION & GESTURE SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            }
+        }
+
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('fullscreen-target');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        const canvas = document.getElementById('ym-canvas');
+        const ctx = canvas.getContext('2d');
+        const wrapper = document.getElementById('viewport-wrapper');
+
+        function resizeCanvas() {
+            const parent = canvas.parentElement;
+            canvas.width = parent.clientWidth - 16;
+            canvas.height = parent.clientHeight - 16;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let animPhase = 0;
+        let zoomLevel = 1.0;
+        let panX = 0;
+        let panY = 0;
+        let initialPinchDistance = null;
+        let isDragging = false;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+        let fieldComplexity = 12;
+
+        function randomizePattern() {
+            playSound('click');
+            fieldComplexity = Math.floor(Math.random() * 6) + 10; // 10 to 15
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const deltaX = e.clientX - lastMouseX;
+            const deltaY = e.clientY - lastMouseY;
+            panX += deltaX;
+            panY += deltaY;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        canvas.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                isDragging = true;
+                lastMouseX = e.touches[0].clientX;
+                lastMouseY = e.touches[0].clientY;
+            } else if (e.touches.length === 2) {
+                isDragging = false;
+                initialPinchDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+            }
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+            if (isDragging && e.touches.length === 1) {
+                const deltaX = e.touches[0].clientX - lastMouseX;
+                const deltaY = e.touches[0].clientY - lastMouseY;
+                panX += deltaX;
+                panY += deltaY;
+                lastMouseX = e.touches[0].clientX;
+                lastMouseY = e.touches[0].clientY;
+            } else if (e.touches.length === 2 && initialPinchDistance !== null) {
+                const currentDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                const factor = currentDistance / initialPinchDistance;
+                zoomLevel = Math.min(Math.max(0.5, zoomLevel * (1 + (factor - 1) * 0.1)), 3.0);
+                initialPinchDistance = currentDistance;
+            }
+        }, { passive: true });
+
+        window.addEventListener('touchend', () => {
+            isDragging = false;
+            initialPinchDistance = null;
+        });
+
+        wrapper.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomSensitivity = 0.001;
+            zoomLevel = Math.min(Math.max(0.5, zoomLevel - e.deltaY * zoomSensitivity), 3.0);
+        }, { passive: false });
+
+        function render() {
+            ctx.fillStyle = '#111113';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.save();
+            ctx.translate(canvas.width / 2 + panX, canvas.height / 2 + panY);
+            ctx.scale(zoomLevel, zoomLevel);
+
+            animPhase += 0.02;
+
+            let cols = fieldComplexity;
+            let rows = fieldComplexity;
+            let size = Math.min(canvas.width, canvas.height) * 0.35;
+            let spacing = size / cols;
+
+            let vectors = [];
+
+            for (let r = 0; r <= rows; r++) {
+                let row = [];
+                for (let c = 0; c <= cols; c++) {
+                    let x = (c - cols / 2) * spacing;
+                    let y = (r - rows / 2) * spacing;
+
+                    // Yang-Mills gauge curvature tensor simulation vector field
+                    let angle = Math.sin(x * 0.05 + animPhase) * Math.cos(y * 0.05 - animPhase) * Math.PI * 2;
+                    let mag = spacing * 0.45 * (1 + 0.5 * Math.sin(animPhase * 0.5 + x * y * 0.001));
+
+                    row.push({
+                        x, y,
+                        vx: Math.cos(angle) * mag,
+                        vy: Math.sin(angle) * mag
+                    });
+                }
+                vectors.push(row);
+            }
+
+            for (let r = 0; r <= rows; r++) {
+                for (let c = 0; c <= cols; c++) {
+                    let p = vectors[r][c];
+                    let hue = (r * 15 + c * 15 + animPhase * 30) % 360;
+
+                    // Draw field tensor vector lines
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p.x + p.vx, p.y + p.vy);
+                    ctx.strokeStyle = `hsl(${hue}, 90%, 55%)`;
+                    ctx.lineWidth = 1.5;
+                    ctx.shadowColor = `hsl(${hue}, 90%, 55%)`;
+                    ctx.shadowBlur = 6;
+                    ctx.stroke();
+
+                    // Draw node particle
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsl(${hue}, 90%, 65%)`;
+                    ctx.fill();
+
+                    // Connect neighboring gauge lattice points
+                    if (c < cols) {
+                        let pRight = vectors[r][c + 1];
+                        ctx.beginPath();
+                        ctx.moveTo(p.x + p.vx, p.y + p.vy);
+                        ctx.lineTo(pRight.x + pRight.vx, pRight.y + pRight.vy);
+                        ctx.strokeStyle = `hsla(${hue}, 90%, 55%, 0.3)`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                    if (r < rows) {
+                        let pDown = vectors[r + 1][c];
+                        ctx.beginPath();
+                        ctx.moveTo(p.x + p.vx, p.y + p.vy);
+                        ctx.lineTo(pDown.x + pDown.vx, pDown.y + pDown.vy);
+                        ctx.strokeStyle = `hsla(${hue}, 90%, 55%, 0.3)`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            ctx.restore();
+            requestAnimationFrame(render);
+        }
+
+        render();
+    </script>
+</body>
+</html>

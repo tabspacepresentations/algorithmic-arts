@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluid Vorticity Tracer - Tabspace Algorithmic Arts</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#ff6D00',
+                            green: '#22c55e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Fullscreen container styling (includes Name and Viewport/Controls) */
+        #fullscreen-target:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #fullscreen-target:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #fullscreen-target:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-6 py-4 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Algorithmic Arts Logo">
+                    <img src="../../images/logo.png" alt="Tabspace Presentations Logo" class="h-16 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-lg md:text-2xl font-light">/ Fluid Vorticity Tracer</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">Back to Arts</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="w-full px-6 py-8 space-y-6 max-w-4xl mx-auto flex-grow flex flex-col items-center justify-center">
+        
+        <!-- Description Section -->
+        <div class="card-section p-6 md:p-8 w-full text-center space-y-4 bg-zinc-900/40 border border-zinc-800">
+            <p class="text-zinc-200 text-sm md:text-base leading-relaxed">
+                A <span class="text-brand-orange">fluid vorticity tracer</span> simulates the swirling structures (vortices) within a 2D fluid flow by advecting tracer particles along a mathematically generated vector field, such as the Kármán vortex street.
+            </p>
+            <p class="text-zinc-400 text-xs md:text-sm leading-relaxed">
+                This enhanced algorithmic arts piece simulates complex fluid dynamics, featuring smooth animated particle trails, dynamic color shimmering, and fully interactive touch pinch-to-zoom, swipe, and wheel controls directly within your browser viewport.
+            </p>
+        </div>
+
+        <!-- Fullscreen Target (Includes Title, Canvas with Animation/Pinch/Zoom, and Controls) -->
+        <div id="fullscreen-target" class="w-full flex flex-col items-center space-y-4">
+            <div class="text-center space-y-1">
+                <h1 class="text-2xl md:text-3xl tracking-tight text-white">Fluid Vorticity Tracer</h1>
+            </div>
+
+            <!-- Canvas Viewport with Pan, Pinch, and Wheel Zoom support -->
+            <div id="viewport-wrapper" class="card-section p-2 bg-zinc-900/90 w-full max-w-[600px] aspect-square flex items-center justify-center overflow-hidden border border-zinc-800 rounded-xl relative shadow-2xl touch-none">
+                <canvas id="vorticity-canvas" class="w-full h-full block rounded-lg cursor-grab active:cursor-grabbing"></canvas>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="flex gap-2 justify-center pt-2">
+                <button onclick="regenerateVorticity()" class="cta-btn-green px-6 py-2 text-sm">Shift Flow</button>
+                <button onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 py-2 text-xs md:text-sm flex items-center gap-1.5">
+                    <span>Fullscreen</span> ⛶
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="py-6 border-t border-zinc-900 text-center">
+        <p class="text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-brand-green">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- ANIMATION, RENDERING & TOUCH PINCH / PAN SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            }
+        }
+
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('fullscreen-target');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        const canvas = document.getElementById('vorticity-canvas');
+        const ctx = canvas.getContext('2d');
+        const wrapper = document.getElementById('viewport-wrapper');
+
+        // State variables declared upfront
+        let zoomLevel = 1.0;
+        let panX = 0;
+        let panY = 0;
+        let colorOffset = 0;
+        let animTime = 0;
+        let flowMode = 0;
+
+        let particles = [];
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+        let initialPinchDistance = null;
+
+        function initVorticity() {
+            particles = [];
+            const numParticles = 800;
+            for (let i = 0; i < numParticles; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: 0,
+                    vy: 0,
+                    life: Math.random() * 1.0 + 0.5
+                });
+            }
+        }
+
+        function resizeCanvas() {
+            const parent = canvas.parentElement;
+            canvas.width = parent.clientWidth - 16;
+            canvas.height = parent.clientHeight - 16;
+            initVorticity();
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        initVorticity();
+
+        function regenerateVorticity() {
+            playSound('click');
+            colorOffset = (colorOffset + 60) % 360;
+            flowMode = (flowMode + 1) % 3;
+            initVorticity();
+        }
+
+        // Mouse Pan Support
+        wrapper.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX - panX;
+            startY = e.clientY - panY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            panX = e.clientX - startX;
+            panY = e.clientY - startY;
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        // Touch Pan & Precise Two-Finger Pinch-to-Zoom Support
+        wrapper.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                isDragging = true;
+                startX = e.touches[0].clientX - panX;
+                startY = e.touches[0].clientY - panY;
+                initialPinchDistance = null;
+            } else if (e.touches.length === 2) {
+                isDragging = false;
+                initialPinchDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+            }
+        }, { passive: true });
+
+        wrapper.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1 && isDragging) {
+                panX = e.touches[0].clientX - startX;
+                panY = e.touches[0].clientY - startY;
+            } else if (e.touches.length === 2 && initialPinchDistance !== null) {
+                const currentDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                const factor = currentDistance / initialPinchDistance;
+                zoomLevel = Math.min(Math.max(0.3, zoomLevel * factor), 5.0);
+                initialPinchDistance = currentDistance;
+            }
+        }, { passive: true });
+
+        wrapper.addEventListener('touchend', (e) => {
+            if (e.touches.length < 1) isDragging = false;
+            if (e.touches.length < 2) initialPinchDistance = null;
+        });
+
+        // Desktop Wheel/Trackpad Zoom Support
+        wrapper.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomSensitivity = 0.001;
+            zoomLevel = Math.min(Math.max(0.3, zoomLevel - e.deltaY * zoomSensitivity), 5.0);
+        }, { passive: false });
+
+        function getFlowField(x, y) {
+            let u = 2.5, v = 0;
+            let cx = canvas.width / 2, cy = canvas.height / 2;
+            let t = animTime * 0.5;
+
+            if (flowMode === 0) {
+                let dx = x - cx, dy = y - cy;
+                let rSq = dx * dx + dy * dy + 200;
+                u += 1500 * dy / rSq;
+                v -= 1500 * dx / rSq;
+            } else if (flowMode === 1) {
+                u = 2.0 + Math.sin(y * 0.02 + t) * 1.5;
+                v = Math.cos(x * 0.02 + t) * 1.5;
+            } else {
+                let dx = x - cx, dy = y - cy;
+                u = -dy * 0.03 + Math.sin(t) * 1.5;
+                v = dx * 0.03 + Math.cos(t) * 1.5;
+            }
+            return { u, v };
+        }
+
+        function render() {
+            ctx.fillStyle = '#111113';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.save();
+            ctx.translate(canvas.width / 2 + panX, canvas.height / 2 + panY);
+            ctx.scale(zoomLevel, zoomLevel);
+
+            animTime += 0.03;
+
+            const halfW = canvas.width / 2;
+            const halfH = canvas.height / 2;
+
+            particles.forEach((p, idx) => {
+                let flow = getFlowField(p.x, p.y);
+                p.vx = flow.u;
+                p.vy = flow.v;
+
+                let prevX = p.x;
+                let prevY = p.y;
+
+                p.x += p.vx;
+                p.y += p.vy;
+
+                // Wrap around boundaries
+                if (p.x < -halfW) { p.x = halfW; prevX = halfW; }
+                if (p.x > halfW) { p.x = -halfW; prevX = -halfW; }
+                if (p.y < -halfH) { p.y = halfH; prevY = halfH; }
+                if (p.y > halfH) { p.y = -halfH; prevY = -halfH; }
+
+                let hue = (idx * 0.4 + colorOffset + Math.sin(animTime * 0.5) * 30) % 360;
+
+                ctx.beginPath();
+                ctx.moveTo(prevX - halfW, prevY - halfH);
+                ctx.lineTo(p.x - halfW, p.y - halfH);
+                ctx.strokeStyle = `hsla(${hue}, 85%, 55%, 0.75)`;
+                ctx.lineWidth = 1.4;
+                ctx.stroke();
+            });
+
+            ctx.restore();
+            requestAnimationFrame(render);
+        }
+
+        render();
+    </script>
+</body>
+</html>

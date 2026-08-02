@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Koch Snowflake Generator & Mathematical Art | Tabspace Algorithmic Art</title>
+    <meta name="description" content="Explore interactive Koch snowflake generators in real-time. Discover how recursive fractal geometry and iterative line substitution create mesmerizing geometric artwork with custom color controls.">
+    <link rel="canonical" href="https://tabspacepresentations.com/algorithmic-art/view/koch-snowflake-generator/">
+
+    <!-- Open Graph / Social Meta Tags -->
+    <meta property="og:title" content="Interactive Koch Snowflake Generator & Mathematical Art">
+    <meta property="og:description" content="Explore interactive Koch snowflake generators in real-time. Discover how recursive fractal geometry and iterative line substitution create mesmerizing geometric artwork with custom color controls.">
+    <meta property="og:url" content="https://tabspacepresentations.com/algorithmic-art/view/koch-snowflake-generator/">
+    <meta property="og:type" content="website">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#ff6D00',
+                            green: '#22c55e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        .ad-slot-728x90 {
+            width: 728px;
+            height: 90px;
+            max-width: 100%;
+            background-color: rgba(24, 24, 27, 0.8);
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #71717a;
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        #fullscreen-target:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #fullscreen-target:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #fullscreen-target:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-6 py-4 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Algorithmic Art Logo">
+                    <img src="../../images/logo.png" alt="Tabspace Presentations Logo" class="h-16 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-lg md:text-2xl font-light">/ Koch Snowflake Generator</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">Back to Arts</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="w-full px-6 py-8 space-y-6 max-w-4xl mx-auto flex-grow flex flex-col items-center justify-center">
+        
+        <!-- Description Section -->
+        <section class="card-section p-6 md:p-8 w-full text-center space-y-4 bg-zinc-900/40 border border-zinc-800">
+            <p class="text-zinc-200 text-sm md:text-base leading-relaxed">
+                The <span class="text-brand-orange">Koch snowflake</span> is one of the earliest known fractals, constructed by iteratively replacing the middle section of line segments with triangular peaks.
+            </p>
+            <p class="text-zinc-400 text-xs md:text-sm leading-relaxed">
+                Featuring infinite perimeter enclosed within a finite area, this recursive geometry creates mesmerizing crystalline structures enriched with shifting color spectrums.
+            </p>
+        </section>
+
+        <!-- Ad Slot Under Description (728 x 90) -->
+        <div class="w-full py-2 flex justify-center">
+            <div class="ad-slot-728x90">
+                <span>Horizontal Banner Ad (728 &times; 90)</span>
+            </div>
+        </div>
+
+        <!-- Fullscreen Target -->
+        <div id="fullscreen-target" class="w-full flex flex-col items-center space-y-4">
+            <div class="text-center space-y-1">
+                <h2 class="text-2xl md:text-3xl tracking-tight text-white">Interactive Koch Snowflake Simulation</h2>
+            </div>
+
+            <!-- Canvas Viewport -->
+            <div id="viewport-wrapper" class="card-section p-2 bg-zinc-900/90 w-full max-w-[600px] aspect-square flex items-center justify-center overflow-hidden border border-zinc-800 rounded-xl relative shadow-2xl touch-none">
+                <canvas id="koch-canvas" class="w-full h-full block rounded-lg cursor-grab active:cursor-grabbing" aria-label="Interactive Koch Snowflake Animation Canvas"></canvas>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="flex gap-2 justify-center pt-2">
+                <button onclick="randomizePattern()" class="cta-btn-green px-6 py-2 text-sm">Randomize</button>
+                <button onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 py-2 text-xs md:text-sm flex items-center gap-1.5">
+                    <span>Fullscreen</span> ⛶
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Ad Slot Above Footer (728 x 90) -->
+    <div class="w-full px-6 py-4 flex justify-center">
+        <div class="ad-slot-728x90">
+            <span>Horizontal Banner Ad (728 &times; 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-6 border-t border-zinc-900 text-center">
+        <p class="text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-brand-green">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- SIMULATION & GESTURE SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            }
+        }
+
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('fullscreen-target');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        const canvas = document.getElementById('koch-canvas');
+        const ctx = canvas.getContext('2d');
+        const wrapper = document.getElementById('viewport-wrapper');
+
+        function resizeCanvas() {
+            const parent = canvas.parentElement;
+            canvas.width = parent.clientWidth - 16;
+            canvas.height = parent.clientHeight - 16;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let recursionDepth = 4;
+        let animPhase = 0;
+        let zoomLevel = 1.0;
+        let initialPinchDistance = null;
+        let isDragging = false;
+        let lastMouseX = 0;
+
+        function randomizePattern() {
+            playSound('click');
+            recursionDepth = Math.floor(Math.random() * 3) + 3; // 3 to 5
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            lastMouseX = e.clientX;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const deltaX = e.clientX - lastMouseX;
+            animPhase += deltaX * 0.01;
+            lastMouseX = e.clientX;
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        canvas.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                isDragging = true;
+                lastMouseX = e.touches[0].clientX;
+            } else if (e.touches.length === 2) {
+                isDragging = false;
+                initialPinchDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+            }
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+            if (isDragging && e.touches.length === 1) {
+                const deltaX = e.touches[0].clientX - lastMouseX;
+                animPhase += deltaX * 0.01;
+                lastMouseX = e.touches[0].clientX;
+            } else if (e.touches.length === 2 && initialPinchDistance !== null) {
+                const currentDistance = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                const factor = currentDistance / initialPinchDistance;
+                zoomLevel = Math.min(Math.max(0.5, zoomLevel * (1 + (factor - 1) * 0.1)), 3.0);
+                initialPinchDistance = currentDistance;
+            }
+        }, { passive: true });
+
+        window.addEventListener('touchend', () => {
+            isDragging = false;
+            initialPinchDistance = null;
+        });
+
+        wrapper.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomSensitivity = 0.001;
+            zoomLevel = Math.min(Math.max(0.5, zoomLevel - e.deltaY * zoomSensitivity), 3.0);
+        }, { passive: false });
+
+        function getKochPoints(p1, p2, depth) {
+            if (depth === 0) {
+                return [p2];
+            }
+            let dx = p2.x - p1.x;
+            let dy = p2.y - p1.y;
+
+            let p3 = { x: p1.x + dx / 3, y: p1.y + dy / 3 };
+            let p4 = { x: p1.x + (dx * 2) / 3, y: p1.y + (dy * 2) / 3 };
+
+            let angle = Math.atan2(dy, dx) - Math.PI / 3;
+            let dist = Math.hypot(dx / 3, dy / 3);
+            let pMid = {
+                x: p3.x + Math.cos(angle) * dist,
+                y: p3.y + Math.sin(angle) * dist
+            };
+
+            let res = [];
+            res.push(...getKochPoints(p1, p3, depth - 1));
+            res.push(...getKochPoints(p3, pMid, depth - 1));
+            res.push(...getKochPoints(pMid, p4, depth - 1));
+            res.push(...getKochPoints(p4, p2, depth - 1));
+            return res;
+        }
+
+        function render() {
+            ctx.fillStyle = '#111113';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.scale(zoomLevel, zoomLevel);
+
+            animPhase += 0.01;
+            let size = Math.min(canvas.width, canvas.height) * 0.35;
+
+            // Base equilateral triangle
+            let pA = { x: 0, y: -size };
+            let pB = { x: size * Math.cos(Math.PI / 6), y: size * Math.sin(Math.PI / 6) };
+            let pC = { x: -size * Math.cos(Math.PI / 6), y: size * Math.sin(Math.PI / 6) };
+
+            let sides = [
+                { start: pA, end: pB },
+                { start: pB, end: pC },
+                { start: pC, end: pA }
+            ];
+
+            ctx.rotate(animPhase * 0.2);
+
+            let segmentIndex = 0;
+            for (let side of sides) {
+                let points = [side.start, ...getKochPoints(side.start, side.end, recursionDepth)];
+                for (let i = 0; i < points.length - 1; i++) {
+                    let pt1 = points[i];
+                    let pt2 = points[i + 1];
+
+                    let hue = (segmentIndex * 4 + animPhase * 50) % 360;
+
+                    ctx.beginPath();
+                    ctx.moveTo(pt1.x, pt1.y);
+                    ctx.lineTo(pt2.x, pt2.y);
+                    ctx.strokeStyle = `hsl(${hue}, 90%, 55%)`;
+                    ctx.lineWidth = 2;
+                    ctx.shadowColor = `hsl(${hue}, 90%, 55%)`;
+                    ctx.shadowBlur = 10;
+                    ctx.stroke();
+
+                    segmentIndex++;
+                }
+            }
+
+            ctx.restore();
+            requestAnimationFrame(render);
+        }
+
+        render();
+    </script>
+</body>
+</html>
